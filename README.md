@@ -24,7 +24,7 @@ The shape we are using are **.OFF** shapes. We provide code to parse **.OBJ**
 shapes. You can use our code to convert **.OBJ** shapes to **.OFF** shapes to be
 able to use these shapes to perform the prerequired operations and our software.
 
-## Prerequirements
+## Prerequirements
 
 First, you need to compute a **3D medial axis**, its **erosion thickness**and a 
 **curve skeleton** of the shape you want to decompose.
