@@ -1,6 +1,7 @@
-Geometric Shape Decomposition 3D
+# Geometric Shape Decomposition 3D
 
-This project aims to compute a salience measure calle
+This project aims to compute a salience measure for 3D shape for 3D Shape 
+Decomposition and Sub-parts Classification.
 
 We present a method for decomposing 3D shapes into sub-parts and classifying 
 those parts according to their level of salience. Such an analysis is important 
