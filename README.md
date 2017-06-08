@@ -26,7 +26,7 @@ able to use these shapes to perform the prerequired operations and our software.
 
 ## Prerequirements
 
-First, you need to compute a **3D medial axis**, its **erosion thickness**and a 
+First, you need to compute a **3D medial axis**, its **erosion thickness** and a 
 **curve skeleton** of the shape you want to decompose.
 
 The 3D medial axis can be obtained thanks to the Scale Axis Transform from :
