@@ -159,7 +159,7 @@ end
 
 
 % Clustering the faces rather than the tetrahedra
-[faceClustering,pointClustering] = computeFaceClustering(clustering(:,3),facesS,verticesS,verticesSk,centroids,WEDF);
+[facesS,verticesS,faceClustering,pointClustering] = computeFaceClustering(clustering(:,3),facesS,verticesS,verticesSk,centroids,WEDF);
 
 % Print the clustering of the shape
 figure; 

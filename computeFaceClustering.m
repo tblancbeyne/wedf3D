@@ -1,4 +1,4 @@
-function [faceClustering,pointClust] = computeFaceClustering(clustering,faces,vertices,verticesSk,centroids,WEDF)
+function [faces,vertices,faceClustering,pointClust] = computeFaceClustering(clustering,faces,vertices,verticesSk,centroids,WEDF)
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -39,6 +39,15 @@ end
 faceClustering = ones(size(faces,1),1)*max(pointClust);
 
 for i=1:size(faces,1)
+    % Avoid shaky boundaries between parts
+    currClust = [0 0 0];
+    for j=1:3
+        currClust(j) = pointClust(faces(i,j));
+    end
+    if currClust(1) ~= currClust(2) || currClust(1) ~= currClust(3)
+        [faces,vertices,faceClustering] = smoothClustering(faces,i,vertices,faceClustering,currClust);
+    end
+
     % Mean
 %     currClust = 0;
 %     for j=1:3
@@ -46,12 +55,12 @@ for i=1:size(faces,1)
 %     end
 %     faceClustering(i) = currClust/3;
 
-%     Median
-    currClust = [0 0 0];
-    for j=1:3
-        currClust(j) = pointClust(faces(i,j));
-    end
-    faceClustering(i) = median(currClust);
+    % Median
+%    currClust = [0 0 0];
+%    for j=1:3
+%        currClust(j) = pointClust(faces(i,j));
+%    end
+%    faceClustering(i) = median(currClust);
 
     % Max
 %     faceClustering(i) = 0;
