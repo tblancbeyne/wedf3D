@@ -1,6 +1,5 @@
 function [junctions] = findJunctions(edges)
 %FINDJUNCTIONS Summary of this function goes here
-%  sortedEdges : edges previously sorted with sortEdge(edges)
 
 vertCounter = zeros(max(max(edges)),1);
 
