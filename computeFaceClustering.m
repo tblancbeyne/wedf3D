@@ -46,6 +46,8 @@ for i=1:size(faces,1)
     end
     if currClust(1) ~= currClust(2) || currClust(1) ~= currClust(3)
         [faces,vertices,faceClustering] = smoothClustering(faces,i,vertices,faceClustering,currClust);
+    else
+        faceClustering(i) = currClust[1];
     end
 
     % Mean
