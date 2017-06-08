@@ -31,7 +31,7 @@ optimalK = mode(optimalK);
 % % else
 % %    optimalK = size(noncoreICS,1);
 % end
-%optimalK = 2;
+%optimalK = 6;
 
 % Dividing the non belonging to main shape ics points WEDF values to
 % perform the Kmeans clustering with initial seeds
