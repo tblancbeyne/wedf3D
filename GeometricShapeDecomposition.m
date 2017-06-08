@@ -3,22 +3,22 @@ function [] = GeometricShapeDecomposition()
 %
 
 % Parsing the shape
-[verticesS,facesS] = parseOff('horse2/horse2.off');
+[verticesS,facesS] = parseOff('data/horse2/horse2.off');
 
 % noise = rand(size(verticesS))/10;
 % verticesS = verticesS + noise - mean(noise(:));
 
 % Parsing the medial axis
-[verticesM] = parseOff2('horse2/horse2-medial_axis.off');
+[verticesM] = parseOff2('data/horse2/horse2-medial_axis.off');
 
 
 % Parsing erosion thickness. In our case, the ET is in fact the MBT because
 % radiuses of balls is set to 0 when computing the ET
-verticesEt = parseEt('horse2/horse2-erosion_thickness.et');
+verticesEt = parseEt('data/horse2/horse2-erosion_thickness.et');
 verticesM = horzcat(verticesM,verticesEt);
 
 % Parsing skeleton
-[verticesSk,edgesSk] = parseSk2('horse2/horse2-skeleton.sk');
+[verticesSk,edgesSk] = parseSk2('data/horse2/horse2-skeleton.sk');
 
 %displaySkeleton(verticesSk,edgesSk);
 
