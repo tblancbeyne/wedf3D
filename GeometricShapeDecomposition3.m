@@ -129,7 +129,7 @@ end
 % histogram(WEDF(ics(:)));
 
 % Clustering the faces
-[faceClustering] = computeFaceClustering(clustering(:,3),facesS,verticesS,verticesSk,centroids,WEDF);
+[facesS,verticesS,faceClustering] = computeFaceClustering(clustering(:,3),facesS,verticesS,verticesSk,centroids,WEDF);
 
 % Print the clustering of the shape
 figure; 
