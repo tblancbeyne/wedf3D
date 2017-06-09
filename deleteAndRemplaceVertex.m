@@ -26,7 +26,7 @@ for k=size(edges,1):-1:1 % loop on edges to update the indexes
             edgePart1 = min(j,edges(k,1));
             edgePart2 = max(j,edges(k,1));
         end
-        edges(k,:) = horzcat(edgePart1,edgePart2);
+        edges(k,:) = [edgePart1,edgePart2];
     end
     if edges(k,1) > i
         edges(k,1) = edges(k,1) - 1;
@@ -34,12 +34,13 @@ for k=size(edges,1):-1:1 % loop on edges to update the indexes
     if edges(k,2) > i
         edges(k,2) = edges(k,2) - 1;
     end
-    if j > i
-        j = j-1;
-    end
     if edges(k,2) == edges(k,1); % deleting edges that have the same extremities
         edges(k,:) = [];
     end
+end
+
+if j > i
+    j = j-1;
 end
 
 % Sorting the edges
