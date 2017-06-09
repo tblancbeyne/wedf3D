@@ -11,25 +11,23 @@ while ~isempty(endpoints)
     % Initializing values
     prevPoint = 0; % The previous point
     distance = 0; % The distance from the kept point to the current point
-    nbPoint = 1; % The number of points between the kept point and the current point (both included)
     currChild = 0; % The child of the currPoint (i.e. the next point on the branch)
     currPoint = endpoints(1,:); % First point of the current branch
     endpoints(1,:) = []; % Deleting this endpoint as it as been used
     
-    while max(currChild==junctions) ~= 1 % While we are not at a junction
+    while max(currChild==junctions) ~= 1 & max(currChild==endpoints) ~= 1 % While we are not at a junction
         currChild = findChild(edges,currPoint); % The neighbors of the currPoint
         currChild = currChild(currChild(:) ~= prevPoint); % Only keeping the NEXT one on the branch
         distance = distance + sqrt(sum((vertices(currPoint,:) - vertices(currChild,:)) .^ 2)); % Computing the geodesic distance between the last kept point and the child 
-        
-        if max(currChild==junctions) ~= 1 % If we are not at the end of the branch (i.e. a junction point)
+        if max(currChild==junctions) ~= 1 && max(currChild==endpoints) ~= 1 % If we are not at the end of the branch (i.e. a junction point or another endpoint)
             if (1/distance > ratio) % If we have too much points for a too small distance
-                [vertices,edges] = deleteAndRemplaceVertex(currChild,currPoint,vertices,edges); % Deleting the child
-                junctions(junctions(:) > currChild) = junctions(junctions(:) > currChild) - 1;             %
-                endpoints(endpoints(:) > currChild) = endpoints(endpoints(:) > currChild) - 1;             % 
-                nearJunction(nearJunction(:) > currChild) = nearJunction(nearJunction(:) > currChild) - 1; %
-                if currPoint > currChild                                                                   % Updating values
-                    currPoint = currPoint - 1;                                                             %
-                end                                                                                        %
+                [vertices,edges,currPoint] = deleteAndRemplaceVertex(currChild,currPoint,vertices,edges); % Deleting the child
+                junctions(junctions(:) > currChild) = junctions(junctions(:) > currChild) - 1;               %
+                endpoints(endpoints(:) > currChild) = endpoints(endpoints(:) > currChild) - 1;               % 
+                nearJunction(nearJunction(:) >= currChild) = nearJunction(nearJunction(:) >= currChild) - 1; % Updating values                                                                                %
+                if prevPoint > currChild                                                                     %
+                    prevPoint = prevPoint - 1;                                                               %
+                end                                                                                          %
             else
                 prevPoint = currPoint; % Keeping the point and storing it as previous point
                 currPoint = currChild; % Updating currPoint as the child has been kept
@@ -72,9 +70,12 @@ while ~isempty(junctions)
                 [vertices,edges] = deleteAndRemplaceVertex(currChild,currPoint,vertices,edges); % Deleting the child
                 junctions(junctions(:) > currChild) = junctions(junctions(:) > currChild) - 1;             %
                 endpoints(endpoints(:) > currChild) = endpoints(endpoints(:) > currChild) - 1;             %
-                nearJunction(nearJunction(:) > currChild) = nearJunction(nearJunction(:) > currChild) - 1; % Updating values
+                nearJunction(nearJunction(:) > currChild) = nearJunction(nearJunction(:) > currChild) - 1; % 
                 if currPoint > currChild                                                                   %
-                    currPoint = currPoint - 1;                                                             %
+                    currPoint = currPoint - 1;                                                             % Updating values
+                end                                                                                        %
+                if prevPoint > currChild                                                                   %
+                    prevPoint = prevPoint - 1;                                                             %
                 end                                                                                        %
             else
                 prevPoint = currPoint; % Keeping the point and storing it as previous point
