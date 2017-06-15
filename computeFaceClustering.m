@@ -40,15 +40,26 @@ faceClustering = ones(size(faces,1),1)*max(pointClust);
 
 for i=1:size(faces,1)
     % Avoid shaky boundaries between parts
-    currClust = [0 0 0];
-    for j=1:3
-        currClust(j) = pointClust(faces(i,j));
-    end
-    if currClust(1) ~= currClust(2) || currClust(1) ~= currClust(3)
-        [faces,vertices,faceClustering] = smoothClustering(faces,i,vertices,faceClustering,currClust);
-    else
-        faceClustering(i) = currClust(1);
-    end
+%     currClust = [0 0 0];
+%     for j=1:3
+%         currClust(j) = pointClust(faces(i,j));
+%     end
+%     if currClust(1) ~= currClust(2) || currClust(1) ~= currClust(3)
+%         [faces,vertices,faceClustering] = smoothClustering(faces,i,vertices,faceClustering,currClust);
+%     else
+%         faceClustering(i) = currClust(1);
+%     end
+
+      % Finding the separation with precision  
+      currClust = [0 0 0];
+      for j=1:3
+          currClust(j) = pointClust(faces(i,j));
+      end
+      if currClust(1) ~= currClust(2) || currClust(1) ~= currClust(3)
+          [faces,vertices,faceClustering] = smoothClustering2(faces,i,vertices,verticesSk,clustering,faceClustering,medians,currClust);
+      else
+          faceClustering(i) = currClust(1);
+      end
 
     % Mean
 %     currClust = 0;
