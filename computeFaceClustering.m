@@ -10,15 +10,7 @@ for i=1:size(centroids,1)
 end
     
 for j=1:size(vertices,1)
-    minDist = realmax;
-    vert = -1;  
-    for i=1:size(verticesSk,1)
-        dist = sqrt((vertices(j,1)-verticesSk(i,1))^2+(vertices(j,2)-verticesSk(i,2))^2+(vertices(j,3)-verticesSk(i,3))^2)/power(medians(clustering(i)),1/4);
-        if dist < minDist
-            minDist = dist;
-            vert = i;
-        end
-    end
+    [~,vert] = min(sqrt((vertices(j,1)-verticesSk(:,1)).^2+(vertices(j,2)-verticesSk(:,2)).^2+(vertices(j,3)-verticesSk(:,3)).^2)/power(medians(clustering(:)),1/4));
     if vert ~= -1
         pointClust(j) = clustering(vert);
     end
