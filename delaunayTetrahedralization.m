@@ -42,8 +42,8 @@ tetrahedralization.LinkTetMedial = distArray(1:countA,:);
 %tetrahedralization.CircumCenters = circumcenter(tetrahedralizationTemp,indexes);
 
 % Plotting the shape's tetrahedralization (for test purpose)
-figure
-tetramesh(tetrahedralization.ConnectivityList,tetrahedralization.Points);
+%figure
+%tetramesh(tetrahedralization.ConnectivityList,tetrahedralization.Points);
 %pause;
 
 end
