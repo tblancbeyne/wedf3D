@@ -9,7 +9,7 @@ function [endPoints] = findEndpoints(edges, nbVertices)
 
 
 % Initialization
-endPoints = [];
+% endPoints = [];
 
 % Getting an approximate number of vertices if needed, it is approximate
 % because some vertices may not belong to any edge (take care when using
@@ -23,14 +23,8 @@ end
 % that appear once or less
 vertAppearances = countVertexAppearances(edges,nbVertices);
 
-% For each vertex, testing if it is an extremity
-for i=1:size(vertAppearances,1)
-    
-    % Extremity : vertex that appears once or less, added to the list
-    if vertAppearances(i) <= 1;
-        endPoints = vertcat(endPoints, i);
-    end       
-end
+% Finding extremities : vertices appearing ONCE or less
+endPoints = find(vertAppearances<=1);
 
 end
 
