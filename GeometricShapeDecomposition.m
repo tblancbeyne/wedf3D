@@ -1,6 +1,10 @@
 function [] = GeometricShapeDecomposition()
 %GeometricShapeDecomposition Summary of this function goes here
 %
+tic
+
+prompt = 'What is the number of cluster? ';
+clustNb = input(prompt);
 
 % Parsing the shape
 [verticesS,facesS] = parseOff('data/horse2/horse2.off');
@@ -32,7 +36,6 @@ links = linkToClosestETDistance(verticesM,verticesSk);
 % endpoints are the point that are related to ZERO or ONE point, but not
 % more
 endPoints = findEndpoints(edgesSk, size(verticesSk,1));
-endPoints1 = endPoints;
 endPoints = horzcat(endPoints, zeros(size(endPoints,1),1));
 
 % Initializing WEDF to infty
@@ -43,7 +46,7 @@ for i=1:size(endPoints,1)
     WEDF(endPoints(i,1)) = computeWEDF(links{endPoints(i,1)},tetrahedralization,0);
     endPoints(i,2) = WEDF(endPoints(i,1));
 end
-
+toc
 % Computing WEDF on other points
 junctionWEDF = zeros(size(verticesSk,1),1); % Temp parameter to sum WEDF at junctions
 currEdgesSk = edgesSk; % Temp parameter to update the edges
@@ -80,7 +83,7 @@ while ~isempty(endPoints) && ~isempty(currEdgesSk)
     % Sorting the endpoints by WEDF value : smallest WEDF value first
     endPoints = sortrows(endPoints, 2);
 end
-
+toc
 % Histogram of WEDF values
 % figure;
 % % title('WEDF values repartition on the curve skeleton');
@@ -112,7 +115,7 @@ end
 [initialClustering,centroids,ics] = computeInitialClustering(edgesSk,WEDF);
 
 if ~isempty(ics)
-    [core,noncore,centroids] = computeStepOneClustering(initialClustering,centroids,ics);
+    [core,noncore,centroids] = computeStepOneClustering(initialClustering,centroids,ics,clustNb);
 
     core(:,3) = max(noncore(:,3)) + 1;
     %core(:,3) = 0;
@@ -121,7 +124,7 @@ if ~isempty(ics)
 else
     clustering = initialClustering;
 end
-
+toc
 % % Histogram of first clusterized points
 % figure;
 % hold on;
@@ -160,7 +163,7 @@ end
 
 % Clustering the faces rather than the tetrahedra
 [facesS,verticesS,faceClustering] = computeFaceClustering(clustering(:,3),facesS,verticesS,verticesSk,centroids,WEDF);
-
+toc
 % Print the clustering of the shape
 figure; 
 hold on
