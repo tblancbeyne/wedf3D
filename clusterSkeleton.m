@@ -1,10 +1,5 @@
-function [core,noncore,centroids] = computeStepOneClustering(initialClustering,centroids,ics,clusterNumber)
+function [clustering,centroids] = clusterSkeleton(initialClustering,centroids,ics,clusterNumber)
 %% Computing the step one of the clustering presented in the 2D paper
-% This function takes as parameters :
-%    - The ini 
-%
-% This function returns :
-        
 
 % Getting the main shape centroid
 mainShapeCentroid = centroids(2);
@@ -43,10 +38,14 @@ end
 % Sorting the centroids by increasing value
 centroids = [sort(centroids);mainShapeCentroid];
 
-% Performing the lcustering of all remeaning WEDF points
+% Performing the clustering of all remeaning WEDF points
 for i=1:size(noncore,1)
         [~,noncore(i,3)] = min(abs(centroids-noncore(i,2)));
 end
+
+% Concataining mainshape and other clusters
+core(:,3) = max(noncore(:,3)) + 1;
+clustering = sortrows(vertcat(noncore,core),1);   
 
 end
 

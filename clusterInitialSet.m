@@ -1,4 +1,4 @@
-function [clustering,centroids,initialClusteringSet] = computeInitialClustering(edgesSk,WEDF)
+function [clustering,centroids,initialClusteringSet] = clusterInitialSet(edgesSk,WEDF)
 %% Computing the initial clustering step: determining the main shape
 
 % Initial clustering set is computed : it consists in the junction points
@@ -14,11 +14,6 @@ if ~isempty(initialClusteringSet)
     for i=1:size(WEDF,1)
         [~,cluster(i)] = min(abs(centroids-WEDF(i)));
     end
-
-    % For testing
-%     for i=1:size(currClusters,1) 
-%         assert(currClusters(i,3) == cluster(initialClusteringSet(i)));
-%     end
 
     clustering = horzcat([1:size(WEDF,1)]',WEDF,cluster);
 else

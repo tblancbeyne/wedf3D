@@ -83,124 +83,40 @@ while ~isempty(endPoints) && ~isempty(currEdgesSk)
     % Sorting the endpoints by WEDF value : smallest WEDF value first
     endPoints = sortrows(endPoints, 2);
 end
+
 toc
-% Histogram of WEDF values
-% figure;
-% % title('WEDF values repartition on the curve skeleton');
-% % xlabel('WEDF');
-% histogram(WEDF);
 
+% Clustering the skeleton main shape
+[initClustering,centroids,ics] = clusterInitialSet(edgesSk,WEDF);
 
-% Print the shape and skeleton
-% figure; 
-% hold on
-% for i=1:size(facesS,1)
-%     fill3(verticesS(facesS(i,1:3),1),verticesS(facesS(i,1:3),2),verticesS(facesS(i,1:3),3),[0.9 0.9 0.9],'FaceAlpha',0.5,'EdgeColor','none');
-% end
-% for i=1:size(edgesSk,1)
-%      scatter3(verticesSk(edgesSk(i,:),1),verticesSk(edgesSk(i,:),2),verticesSk(edgesSk(i,:),3),8,[1 1 0],'LineWidth',10);
-% end
+toc
 
-% Print WEDF
-% figure; 
-% hold on
-% for i=1:size(facesS,1)
-%     fill3(verticesS(facesS(i,1:3),1),verticesS(facesS(i,1:3),2),verticesS(facesS(i,1:3),3),[0.9 0.9 0.9],'FaceAlpha',0.5,'EdgeColor','none');
-% end
-% for i=1:size(edgesSk,1)
-%     scatter3(verticesSk(edgesSk(i,:),1),verticesSk(edgesSk(i,:),2),verticesSk(edgesSk(i,:),3),8,WEDF(edgesSk(i,:),1),'LineWidth',10);
-% end
+% Clustering the main shape faces
+[facesS,verticesS,faceClustering] = computeFaceClustering(initClustering(:,3),facesS,verticesS,verticesSk,centroids,WEDF);
 
-% Clustering, first step
-[initialClustering,centroids,ics] = computeInitialClustering(edgesSk,WEDF);
+toc
 
+% Clustering the other skeleton points
 if ~isempty(ics)
-    [core,noncore,centroids] = computeStepOneClustering(initialClustering,centroids,ics,clustNb);
-
-    core(:,3) = max(noncore(:,3)) + 1;
-    %core(:,3) = 0;
-
-    clustering = sortrows(vertcat(noncore,core),1);
+    [clustering,centroids] = clusterSkeleton(initClustering,centroids,ics,clustNb); 
 else
-    clustering = initialClustering;
+    clustering = initClustering;
 end
+
+faceClustering(faceClustering(:) == 2) = max(clustering(:,3));
+
 toc
-% % Histogram of first clusterized points
-% figure;
-% hold on;
-% histIcs = histogram(WEDF(ics(:)));
-% histIcs.BinWidth = max(clustering(clustering(:,3) == 1,2)/4);
-% maxC = max(clustering(:,3));
-% for i=1:maxC-1
-%     maxCl = max(clustering(clustering(:,3) == i,2));
-%     maxCl2 = min(clustering(clustering(:,3) == i+1,2));
-%     line([(maxCl+maxCl2)/2 (maxCl+maxCl2)/2], [0 7], 'LineWidth',4);
-% end
-% line([maxCl2 maxCl2], [0 0], 'LineWidth',4);
 
-% % Histogram of all points
-% figure;
-% hold on;
-% histW = histogram(WEDF(:));
-% histW.BinWidth = max(clustering(clustering(:,3) == 1,2)/4);
-% for i=1:maxC-1
-%     maxCl = max(clustering(clustering(:,3) == i,2));
-%     maxCl2 = min(clustering(clustering(:,3) == i+1,2));
-%     line([(maxCl+maxCl2)/2 (maxCl+maxCl2)/2], [0 3000], 'LineWidth',4);
-% end
+% Clustering the other faces
+[facesS,verticesS,faceClustering] = computeFaceClustering2(clustering(:,3),facesS,verticesS,verticesSk,centroids,WEDF,faceClustering);
 
-% Print the shape and skeleton points (clustering)
-% figure; 
-% hold on
-% for i=1:size(facesS,1)
-%     fill3(verticesS(facesS(i,1:3),1),verticesS(facesS(i,1:3),2),verticesS(facesS(i,1:3),3),[0.9 0.9 0.9],'FaceAlpha',0.5,'EdgeColor','none');
-% end
-% for i=1:size(edgesSk,1)
-%     scatter3(verticesSk(edgesSk(i,:),1),verticesSk(edgesSk(i,:),2),verticesSk(edgesSk(i,:),3),8,clustering(edgesSk(i,:),3),'LineWidth',10);
-% end
-
-
-
-% Clustering the faces rather than the tetrahedra
-[facesS,verticesS,faceClustering] = computeFaceClustering(clustering(:,3),facesS,verticesS,verticesSk,centroids,WEDF);
 toc
+
 % Print the clustering of the shape
 figure; 
 hold on
 for i=1:size(facesS,1)
     fill3(verticesS(facesS(i,1:3),1),verticesS(facesS(i,1:3),2),verticesS(facesS(i,1:3),3),faceClustering(i,:),'EdgeColor','none');
 end
-
-% for k = 1:3;
-% figure; 
-% hold on
-%     for i=1:size(facesS,1)
-%         if faceClustering(i,:) <= k
-%             fill3(verticesS(facesS(i,1:3),1),verticesS(facesS(i,1:3),2),verticesS(facesS(i,1:3),3),faceClustering(i,:),'EdgeColor','none');
-%         end
-%     end
-% end
-% 
-% for k = 2:3;
-% figure; 
-% hold on
-%     for i=1:size(facesS,1)
-%         if faceClustering(i,:) <= k
-%             fill3(verticesS(facesS(i,1:3),1),verticesS(facesS(i,1:3),2),verticesS(facesS(i,1:3),3),[1 1 0],'EdgeColor','none');
-%         end
-%     end
-% end
-
-% Print main shape
-% figure; 
-% hold on
-% maxi = max(faceClustering);
-% for i=1:size(facesS,1)
-%     if faceClustering(i,:) == maxi
-%         fill3(verticesS(facesS(i,1:3),1),verticesS(facesS(i,1:3),2),verticesS(facesS(i,1:3),3),[0.5 0 0],'EdgeColor','none');
-%     end
-% end
-
-%writeOff(vertices,faces,faceClustering,'horse2Clust.off');
 
 end
