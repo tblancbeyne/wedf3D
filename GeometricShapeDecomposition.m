@@ -92,7 +92,7 @@ toc
 toc
 
 % Clustering the main shape faces
-[facesS,verticesS,faceClustering] = computeFaceClustering(initClustering(:,3),facesS,verticesS,verticesSk,centroids,WEDF);
+[facesS,verticesS,faceClustering] = clusterFaces(initClustering(:,3),facesS,verticesS,verticesSk,centroids,WEDF);
 
 toc
 
@@ -108,7 +108,7 @@ faceClustering(faceClustering(:) == 2) = max(clustering(:,3));
 toc
 
 % Clustering the other faces
-[facesS,verticesS,faceClustering] = computeFaceClustering2(clustering(:,3),facesS,verticesS,verticesSk,centroids,WEDF,faceClustering);
+[facesS,verticesS,faceClustering] = clusterFaces2(clustering(:,3),facesS,verticesS,verticesSk,centroids,WEDF,faceClustering);
 
 toc
 

@@ -1,4 +1,4 @@
-function [faces,vertices,faceClustering,pointClust] = computeFaceClustering2(clustering,faces,vertices,verticesSk,centroids,WEDF,faceClustering)
+function [faces,vertices,faceClustering,pointClust] = clusterFaces2(clustering,faces,vertices,verticesSk,centroids,WEDF,faceClustering)
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 
