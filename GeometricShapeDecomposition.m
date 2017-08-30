@@ -7,26 +7,26 @@ prompt = 'What is the number of cluster? ';
 clustNb = input(prompt);
 
 % Parsing the shape
-[verticesS,facesS] = parseOff('data/horse2/horse2.off');
+[verticesS,facesS] = parseOff('data/ant1/ant1.off');
 
 % noise = rand(size(verticesS))/10;
 % verticesS = verticesS + noise - mean(noise(:));
 
 % Parsing the medial axis
-[verticesM] = parseOff2('data/horse2/horse2-medial_axis.off');
+[verticesM] = parseOff2('data/ant1/ant1-medial_axis.off');
 
 
 % Parsing erosion thickness. In our case, the ET is in fact the MBT because
 % radiuses of balls is set to 0 when computing the ET
-verticesEt = parseEt('data/horse2/horse2-erosion_thickness.et');
+verticesEt = parseEt('data/ant1/ant1-erosion_thickness.et');
 verticesM = horzcat(verticesM,verticesEt);
 
 % Parsing skeleton
-[verticesSk,edgesSk] = parseSk2('data/horse2/horse2-skeleton.sk');
+[verticesSk,edgesSk] = parseSk2('data/ant1/ant1-skeleton.sk');
 
 %displaySkeleton(verticesSk,edgesSk);
 
-% Delaunay tetrahedralization of the shape
+% Delaunay tetrahedralization of the shapew
 tetrahedralization = delaunayTetrahedralization(verticesS,verticesM);
 
 % Linking skeleton
@@ -46,7 +46,9 @@ for i=1:size(endPoints,1)
     WEDF(endPoints(i,1)) = computeWEDF(links{endPoints(i,1)},tetrahedralization,0);
     endPoints(i,2) = WEDF(endPoints(i,1));
 end
+
 toc
+
 % Computing WEDF on other points
 junctionWEDF = zeros(size(verticesSk,1),1); % Temp parameter to sum WEDF at junctions
 currEdgesSk = edgesSk; % Temp parameter to update the edges
@@ -105,6 +107,12 @@ end
 
 faceClustering(faceClustering(:) == 2) = max(clustering(:,3));
 
+% Histogram of first clusterized points
+printHist(ics,WEDF,clustering,10);
+
+% Histogram of all points
+printHist(1:length(verticesSk),WEDF,clustering,3000);
+
 toc
 
 % To print WEDF
@@ -124,5 +132,29 @@ hold on
 for i=1:size(facesS,1)
     fill3(verticesS(facesS(i,1:3),1),verticesS(facesS(i,1:3),2),verticesS(facesS(i,1:3),3),faceClustering(i,:),'EdgeColor','none');
 end
+
+pause;
+
+for k = 1:3;
+figure; 
+hold on
+    for i=1:size(facesS,1)
+        if faceClustering(i,:) <= k
+            fill3(verticesS(facesS(i,1:3),1),verticesS(facesS(i,1:3),2),verticesS(facesS(i,1:3),3),faceClustering(i,:),'EdgeColor','none');
+        end
+    end
+end
+ 
+for k = 2:3;
+figure; 
+hold on
+    for i=1:size(facesS,1)
+        if faceClustering(i,:) <= k
+            fill3(verticesS(facesS(i,1:3),1),verticesS(facesS(i,1:3),2),verticesS(facesS(i,1:3),3),[1 1 0],'EdgeColor','none');
+        end
+    end
+end
+
+disp('FIN.');
 
 end
