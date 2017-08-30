@@ -107,6 +107,12 @@ faceClustering(faceClustering(:) == 2) = max(clustering(:,3));
 
 toc
 
+% To print WEDF
+printSkeleton(verticesS,facesS,verticesSk,WEDF);
+
+% To print clustering
+printSkeleton(verticesS,facesS,verticesSk,clustering(:,3))
+
 % Clustering the other faces
 [facesS,verticesS,faceClustering] = clusterFaces2(clustering(:,3),facesS,verticesS,verticesSk,centroids,WEDF,faceClustering);
 
