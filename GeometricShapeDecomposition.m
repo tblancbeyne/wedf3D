@@ -49,6 +49,40 @@ end
 
 toc
 
+% Computing EDF
+% EDF(endPoints(:,1)) = 0;
+% edfEdgesSk = edgesSk;
+% edfEndPoints = endPoints;
+% while ~isempty(edfEndPoints) && ~isempty(edfEdgesSk)
+%     minEndPoint = edfEndPoints(1,1); % Finding the point with smallest WEDF value among endpoints
+%     [edfChild] = findChild(edfEdgesSk,minEndPoint(1));  % Finding the child of this point
+%     
+%     % If the point is not a junction or an endpoint (if it is, we finished
+%     % the branch). A junction point is a point that is related to THREE or more points
+%     if ~isempty(edfChild) && ~isJunctionPoint(edfChild,edfEdgesSk) && ~isEndPoint(edfChild(1),edfEdgesSk)
+%         % Computing WEDF
+%         EDF(edfChild(1)) = computeEDF(verticesSk(edfChild(1),:),verticesSk(minEndPoint(1),:),EDF(minEndPoint(1))); 
+%         
+%         % The child is a new endpoint as its parent will be deleted : it
+%         % allows junctions points to become regular point as their
+%         % connection with the parent is deleted
+%         if ~isEndPoint(edfChild(1),edfEdgesSk)
+%             edfEndPoints = vertcat(edfEndPoints,[edfChild(1) EDF(edfChild(1))]);
+%         end
+%     end
+
+%     % In all cases, we remove the current endpoint and all the edges that
+%     % are related to this point (so it child really becomes an endpoint if
+%     % it was not a junction point, or lose one connection if it was a
+%     % junction point)
+%     edfEndPoints = removePoint(minEndPoint(1),edfEndPoints);
+%     edfEdgesSk = updateSkeleton(minEndPoint(1),edfEdgesSk,[]);
+%     
+%     edfEndPoints = sortrows(edfEndPoints, 2);
+% end
+% 
+% toc
+
 % Computing WEDF on other points
 junctionWEDF = zeros(size(verticesSk,1),1); % Temp parameter to sum WEDF at junctions
 currEdgesSk = edgesSk; % Temp parameter to update the edges
