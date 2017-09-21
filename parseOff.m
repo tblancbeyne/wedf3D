@@ -91,7 +91,7 @@ end
 % Increasing all the values by 1 to fit with matlab arrays
 edges = edges +1;
 faces = faces +1;
-edges = countEdgesAppearances(edges);
+edges = unique(edges);
 
 if fclose(file) ~= 0
     disp('Unexpected error. Aborted.');
