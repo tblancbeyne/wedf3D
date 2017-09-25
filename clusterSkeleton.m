@@ -4,14 +4,14 @@ function [clustering,centroids] = clusterSkeleton(initialClustering,centroids,ic
 % Getting the main shape centroid
 mainShapeCentroid = centroids(2);
 
-% Determining the main shape in the initial clustering (core), this main 
+% Determining the main shape in the initial clustering (core), this main
 % shape is not only calculated on the initial clusetring set (ics)
 [core,noncore] = determineCoreAndNonCore(initialClustering,centroids);
 
 % Determining the points in the ics that do noot belong to the main shape
 noncoreICS = determineNonCoreICS(noncore,ics);
 
-realClusterNumber = min(clusterNumber-1,length(noncoreICS));
+realClusterNumber = min(clusterNumber,length(noncoreICS));
 
 % Dividing the non belonging to main shape ics points WEDF values to
 % perform the Kmeans clustering with initial seeds
@@ -47,7 +47,7 @@ end
 
 % Concataining mainshape and other clusters
 core(:,3) = max(noncore(:,3)) + 1;
-clustering = sortrows(vertcat(noncore,core),1);   
+clustering = sortrows(vertcat(noncore,core),1);
 
 end
 
