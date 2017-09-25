@@ -19,7 +19,7 @@ while ~isempty(endPoints) || ~isempty(juncPoints)
                 return;
             end
         end
-        currPoint = juncPoints(i)
+        currPoint = juncPoints(i);
         juncPoints(i) = [];
     else
         break;
@@ -34,7 +34,7 @@ while ~isempty(endPoints) || ~isempty(juncPoints)
         currChild = findChild(edgesSk,currPoint);
         edgesSk = updateSkeleton(currPoint,edgesSk);
         currPoint = currChild;
-        branch = [branch;currPoint]
+        branch = [branch;currPoint];
     end
 
     endPoints(endPoints(:) == currPoint) = [];
