@@ -1,4 +1,4 @@
-function [clusters] = branchClusters(clusters,edgesSk)
+function [clusters] = branchClustering(clusters,edgesSk)
 
 branches = getBranches(edgesSk);
 
@@ -17,4 +17,4 @@ for i=1:length(branches)
     nbPrevClusters = max(clusters);
 end
 
-clusters(mainShape(:)) = max(clusters) + 1;
+clusters(mainShape(:)) = nbPrevClusters;
