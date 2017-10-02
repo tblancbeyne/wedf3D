@@ -142,10 +142,10 @@ end
 faceClustering(faceClustering(:) == 2) = max(clustering(:,3));
 
 % Histogram of first clusterized points
-printHist(ics,WEDF,clustering,10);
+%printHist(ics,WEDF,clustering,10);
 
 % Histogram of all points
-printHist(1:length(verticesSk),WEDF,clustering,3000);
+%printHist(1:length(verticesSk),WEDF,clustering,3000);
 
 toc
 
@@ -153,10 +153,22 @@ toc
 printSkeleton(verticesS,facesS,verticesSk,WEDF);
 
 % To print clustering
-printSkeleton(verticesS,facesS,verticesSk,clustering(:,3))
+%printSkeleton(verticesS,facesS,verticesSk,clustering(:,3));
 
 % Clustering the other faces
 [facesS,verticesS,faceClustering] = clusterFaces2(clustering(:,3),facesS,verticesS,verticesSk,centroids,WEDF,faceClustering);
+
+%figure;
+%hold on
+%for i=1:size(facesS,1)
+%    fill3(verticesS(facesS(i,1:3),1),verticesS(facesS(i,1:3),2),verticesS(facesS(i,1:3),3),faceClustering(i,:),'EdgeColor','none');
+%end
+
+skelSeg = branchClustering(clustering(:,3),edgesSk);
+
+printSkeleton(verticesS,facesS,verticesSk,skelSeg);
+
+[facesS,verticesS,faceSeg] = cutClusters(clustering(:,3),skelSeg,facesS,verticesS,verticesSk,faceClustering);
 
 toc
 
@@ -164,7 +176,9 @@ toc
 figure;
 hold on
 for i=1:size(facesS,1)
-    fill3(verticesS(facesS(i,1:3),1),verticesS(facesS(i,1:3),2),verticesS(facesS(i,1:3),3),faceClustering(i,:),'EdgeColor','none');
+    fill3(verticesS(facesS(i,1:3),1),verticesS(facesS(i,1:3),2),verticesS(facesS(i,1:3),3),faceSeg(i,:),'EdgeColor','none');
 end
+
+disp('FIN');
 
 end
