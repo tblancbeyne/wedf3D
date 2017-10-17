@@ -1,5 +1,7 @@
 function [] = saveOff(vertices,faces,colors,filename)
 
+faces = faces - 1;
+
 if nargin < 4
     filename = 'save.off';
 end
