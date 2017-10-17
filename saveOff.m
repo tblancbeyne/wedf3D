@@ -1,4 +1,4 @@
-function = saveOff(vertices,faces,colors,filename)
+function [] = saveOff(vertices,faces,colors,filename)
 
 if nargin < 4
     filename = 'save.off';
@@ -23,7 +23,6 @@ for i=1:size(faces,1)
     fprintf(fileID,'3 ');
     fprintf(fileID,'%u ',faces(i,1:3));
     fprintf(fileID,'%u ',colors(i,1:3));
-    fprintf(fileID,'1.00');
     fprintf(fileID,'\r\n');
 end
 
