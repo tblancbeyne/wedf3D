@@ -4,7 +4,7 @@ if nargin < 4
     filename = 'save.off';
 end
 
-file = fopen(filename,'w');
+fileID = fopen(filename,'w');
 
 % Printing the head of the file
 fprintf(fileID,'OFF\r\n');
