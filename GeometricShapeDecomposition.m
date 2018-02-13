@@ -22,7 +22,7 @@ verticesEt = parseEt('data/horse2/horse2-erosion_thickness.et');
 verticesM = horzcat(verticesM,verticesEt);
 
 % Parsing skeleton
-[verticesSk,edgesSk] = parseSk2('data/horse2/horse2-skeleton.sk');
+[verticesSk,edgesSk] = parseSk2('data/horse2/horse2-skeleton2.sk');
 
 %displaySkeleton(verticesSk,edgesSk);
 
@@ -50,7 +50,7 @@ end
 toc
 
 % Computing EDF
-% EDF(endPoints(:,1)) = 0;
+% WEDF(endPoints(:,1)) = 0;
 % edfEdgesSk = edgesSk;
 % edfEndPoints = endPoints;
 % while ~isempty(edfEndPoints) && ~isempty(edfEdgesSk)
@@ -60,23 +60,23 @@ toc
 %     % If the point is not a junction or an endpoint (if it is, we finished
 %     % the branch). A junction point is a point that is related to THREE or more points
 %     if ~isempty(edfChild) && ~isJunctionPoint(edfChild,edfEdgesSk) && ~isEndPoint(edfChild(1),edfEdgesSk)
-%         % Computing WEDF
-%         EDF(edfChild(1)) = computeEDF(verticesSk(edfChild(1),:),verticesSk(minEndPoint(1),:),EDF(minEndPoint(1)));
+%        % Computing WEDF
+%        WEDF(edfChild(1)) = computeEDF(verticesSk(edfChild(1),:),verticesSk(minEndPoint(1),:),WEDF(minEndPoint(1)));
 %
 %         % The child is a new endpoint as its parent will be deleted : it
 %         % allows junctions points to become regular point as their
 %         % connection with the parent is deleted
 %         if ~isEndPoint(edfChild(1),edfEdgesSk)
-%             edfEndPoints = vertcat(edfEndPoints,[edfChild(1) EDF(edfChild(1))]);
+%             edfEndPoints = vertcat(edfEndPoints,[edfChild(1) WEDF(edfChild(1))]);
 %         end
 %     end
-
+%
 %     % In all cases, we remove the current endpoint and all the edges that
 %     % are related to this point (so it child really becomes an endpoint if
 %     % it was not a junction point, or lose one connection if it was a
 %     % junction point)
 %     edfEndPoints = removePoint(minEndPoint(1),edfEndPoints);
-%     edfEdgesSk = updateSkeleton(minEndPoint(1),edfEdgesSk,[]);
+%     edfEdgesSk = updateSkeleton(minEndPoint(1),edfEdgesSk);
 %
 %     edfEndPoints = sortrows(edfEndPoints, 2);
 % end
@@ -150,13 +150,23 @@ faceClustering(faceClustering(:) == 2) = max(clustering(:,3));
 toc
 
 % To print WEDF
-printSkeleton(verticesS,facesS,verticesSk,WEDF);
+%printSkeleton(verticesS,facesS,verticesSk,WEDF,'data/horse2/horse2WEDF.fig');
+
+toc
 
 % To print clustering
-%printSkeleton(verticesS,facesS,verticesSk,clustering(:,3));
+%printSkeleton(verticesS,facesS,verticesSk,clustering(:,3),'data/horse2/horse2SkelClustering.fig');
+
+toc
 
 % Clustering the other faces
 [facesS,verticesS,faceClustering] = clusterFaces2(clustering(:,3),facesS,verticesS,verticesSk,centroids,WEDF,faceClustering);
+
+colors2 = createSegColors(faceClustering);
+
+saveOff(verticesS, facesS, colors2, 'data/horse2/horse2decomp3All.off');
+
+toc
 
 %figure;
 %hold on
@@ -166,18 +176,22 @@ printSkeleton(verticesS,facesS,verticesSk,WEDF);
 
 skelSeg = branchClustering(clustering(:,3),edgesSk);
 
-printSkeleton(verticesS,facesS,verticesSk,skelSeg);
+%printSkeleton(verticesS,facesS,verticesSk,skelSeg,'data/horse2/horse2SkelSeg.fig');
 
 [facesS,verticesS,faceSeg] = cutClusters(clustering(:,3),skelSeg,facesS,verticesS,verticesSk,faceClustering);
 
 toc
 
 % Print the clustering of the shape
-figure;
-hold on
-for i=1:size(facesS,1)
-    fill3(verticesS(facesS(i,1:3),1),verticesS(facesS(i,1:3),2),verticesS(facesS(i,1:3),3),faceSeg(i,:),'EdgeColor','none');
-end
+%figure;
+%hold on
+%for i=1:size(facesS,1)
+%    fill3(verticesS(facesS(i,1:3),1),verticesS(facesS(i,1:3),2),verticesS(facesS(i,1:3),3),faceSeg(i,:),'EdgeColor','none');
+%end
+
+colors = createSegColors(faceSeg);
+
+saveOff(verticesS, facesS, colors, 'data/horse2/horse2seg3All.off');
 
 disp('FIN');
 

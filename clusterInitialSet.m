@@ -3,7 +3,8 @@ function [clustering,centroids,initialClusteringSet] = clusterInitialSet(edgesSk
 
 % Initial clustering set is computed : it consists in the junction points
 % and their neighbors
-initialClusteringSet = findInitialClusteringSet(edgesSk);
+%initialClusteringSet = findInitialClusteringSet(edgesSk);
+initialClusteringSet = unique(edgesSk(:));
 
 % A Kmeans clustering is performed on this set to determine which points
 % belong to the main shape and which point doesn't
